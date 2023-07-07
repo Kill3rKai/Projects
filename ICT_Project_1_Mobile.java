@@ -1,11 +1,5 @@
-package ict_project_1_mobile;
+package ict_timetable_saheti;
 
-import javax.swing.JOptionPane;
-import javax.swing.*;
-import java.time.Year;
-import java.time.LocalTime;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
@@ -14,14 +8,23 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
-import javax.swing.JFrame;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
-public class ICT_Project_1_Mobile {
+
+public class ICT_TimeTable_Saheti {
 
     private static TrayIcon trayIcon;
     private static JFrame timetableFrame;
-
+    
     public static void main(String[] args) {
         JOptionPane.showMessageDialog(null, "This Application will alert you of your next subject", "INFO",
                 JOptionPane.INFORMATION_MESSAGE);
@@ -62,8 +65,10 @@ public class ICT_Project_1_Mobile {
             int currentYear = Integer.parseInt(CurrentYear.getText());
             int currentYearNow = Year.now().getValue();
             //Time Data
-            int currentHour = LocalTime.now().getHour();
-            int currentMinute = LocalTime.now().getMinute();
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            int currentDay = cal.get(java.util.Calendar.DAY_OF_WEEK);
+            int currentHour = cal.get(java.util.Calendar.HOUR_OF_DAY);
+            int currentMinute = cal.get(java.util.Calendar.MINUTE);
 
             // Update Grade and Year Annually
             if (currentYearNow > currentYear) {
@@ -170,7 +175,7 @@ public class ICT_Project_1_Mobile {
                     } else {
 
                     }
-                    if (currentDayAbv.toUpperCase().equalsIgnoreCase("MON")) {
+                    if (currentDay == java.util.Calendar.MONDAY) {
 
                         if (currentHour == 8 && currentMinute == 20) {
                             JOptionPane.showMessageDialog(null, "You Have " + option4 + " Next! Enjoy", "", JOptionPane.WARNING_MESSAGE);
@@ -226,7 +231,7 @@ public class ICT_Project_1_Mobile {
                         e.printStackTrace();
                     }
                     //Grade 10 MH Alerts Tue
-                    if (currentDayAbv.toUpperCase().equalsIgnoreCase("TUE")) {
+                    if (currentDay == java.util.Calendar.TUESDAY) {
                         if (currentHour == 7 && currentMinute == 50) {
                             JOptionPane.showMessageDialog(null, "You Have " + option3 + " Up Next, Enjoy!");
                         } else {
@@ -286,7 +291,7 @@ public class ICT_Project_1_Mobile {
                         e.printStackTrace();
                     }
                     //Grade 10 MH Alerts Wed
-                    if (currentDayAbv.toUpperCase().equalsIgnoreCase("WED")) {
+                    if (currentDay == java.util.Calendar.WEDNESDAY) {
                         if (currentHour == 7 && currentMinute == 50) {
                             JOptionPane.showMessageDialog(null, "Starting The Day With Languages, Go To Afrikaans or Zulu Respectivly");
                         } else {
@@ -336,7 +341,7 @@ public class ICT_Project_1_Mobile {
                         e.printStackTrace();
                     }
                     //Grade 10 MH Alerts Thu
-                    if (currentDayAbv.toUpperCase().equalsIgnoreCase("THU")) {
+                    if (currentDay == java.util.Calendar.THURSDAY) {
                         if (currentHour == 7 && currentMinute == 50) {
                             JOptionPane.showMessageDialog(null, "Head Over To you Greek Studies To Start The Day");
                         } else {
@@ -391,7 +396,7 @@ public class ICT_Project_1_Mobile {
                         e.printStackTrace();
                     }
                     // Grade 10 MH Alerts Fri
-                    if (currentDayAbv.toUpperCase().equalsIgnoreCase("FRI")) {
+                    if (currentDay == java.util.Calendar.FRIDAY) {
                         if (currentHour == 7 && currentMinute == 50) {
                             JOptionPane.showMessageDialog(null, "You Start The Day With, " + option4);
                         }
@@ -844,3 +849,6 @@ public class ICT_Project_1_Mobile {
         }
     }
 }
+    
+
+
