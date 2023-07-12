@@ -19,12 +19,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-
 public class ICT_TimeTable_Saheti {
 
     private static TrayIcon trayIcon;
     private static JFrame timetableFrame;
-    
+
     public static void main(String[] args) {
         JOptionPane.showMessageDialog(null, "This Application will alert you of your next subject", "INFO",
                 JOptionPane.INFORMATION_MESSAGE);
