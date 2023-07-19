@@ -1,0 +1,193 @@
+package ict_program1.sahetitimetable;
+
+import javax.swing.JOptionPane;
+import javax.swing.*;
+import java.time.Year;
+import java.time.LocalTime;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
+
+public class ICT_Program1SahetiTimeTable {
+    private static TrayIcon trayIcon;
+    private static JFrame timetableFrame;
+
+    public static void main(String[] args) {
+        JOptionPane.showMessageDialog(null, "This Application will alert you of your next subject", "INFO", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "We will start by entering your subject data");
+
+        // GUI
+        JTextField O4 = new JTextField(10);
+        JTextField O3 = new JTextField(10);
+        JTextField O2 = new JTextField(10);
+        JTextField Grade = new JTextField(10);
+        JTextField HomeTeacher = new JTextField(10);
+        JTextField CurrentYear = new JTextField(10);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(new JLabel("Option 4: "));
+        panel.add(O4);
+        panel.add(new JLabel("Option 3: "));
+        panel.add(O3);
+        panel.add(new JLabel("Option 2: "));
+        panel.add(O2);
+        panel.add(new JLabel("Grade: "));
+        panel.add(Grade);
+        panel.add(new JLabel("Home Room Teacher: "));
+        panel.add(HomeTeacher);
+        panel.add(new JLabel("Current Year: "));
+        panel.add(CurrentYear);
+
+        // Data Received
+        int result = JOptionPane.showConfirmDialog(null, panel, "Enter Subject Data", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            String option4 = O4.getText();
+            String option3 = O3.getText();
+            String option2 = O2.getText();
+            int grade = Integer.parseInt(Grade.getText());
+            String homeTeacher = HomeTeacher.getText();
+            int currentYear = Integer.parseInt(CurrentYear.getText());
+            int currentYearNow = Year.now().getValue();
+            int currentHour = LocalTime.now().getHour();
+            int currentMinute = LocalTime.now().getMinute();
+
+            // Update Grade and Year Annually
+            if (currentYearNow > currentYear) {
+                currentYearNow++;
+                grade++;
+            }
+
+            // Option Corrections For Grade 10
+            if (grade == 10 && !(option4.equalsIgnoreCase("Business") || option4.equalsIgnoreCase("IT") || option4.equalsIgnoreCase("Physics") || option4.equalsIgnoreCase("Art") || option4.equalsIgnoreCase("Biology") || option4.equalsIgnoreCase("History") || option4.equalsIgnoreCase("Drama"))) {
+                showErrorDialog();
+            }
+            if (grade == 10 && !(option3.equalsIgnoreCase("Physics") || option3.equalsIgnoreCase("Accounting") || option3.equalsIgnoreCase("Biology") || option3.equalsIgnoreCase("CAT") || option3.equalsIgnoreCase("Geography"))) {
+                showErrorDialog();
+            }
+            if (grade == 10 && !(option2.equalsIgnoreCase("Physics") || option2.equalsIgnoreCase("Business") || option2.equalsIgnoreCase("IT") || option2.equalsIgnoreCase("Consumer") || option2.equalsIgnoreCase("History"))) {
+                showErrorDialog();
+            }
+
+            // Option Corrections For Grade 11
+            if (grade == 11 && !(option4.equalsIgnoreCase("Physics") || option4.equalsIgnoreCase("Art") || option4.equalsIgnoreCase("Business") || option4.equalsIgnoreCase("Biology") || option4.equalsIgnoreCase("IT") || option4.equalsIgnoreCase("History") || option4.equalsIgnoreCase("CAT") || option4.equalsIgnoreCase("Drama"))) {
+                showErrorDialog();
+            }
+            if (grade == 11 && !(option3.equalsIgnoreCase("Business") || option3.equalsIgnoreCase("Accounting") || option3.equalsIgnoreCase("Art") || option3.equalsIgnoreCase("CAT") || option3.equalsIgnoreCase("Geography") || option3.equalsIgnoreCase("Drama"))) {
+                showErrorDialog();
+            }
+            if (grade == 11 && !(option2.equalsIgnoreCase("Physics") || option2.equalsIgnoreCase("Business") || option2.equalsIgnoreCase("IT") || option2.equalsIgnoreCase("Consumer") || option2.equalsIgnoreCase("History") || option2.equalsIgnoreCase("Art"))) {
+                showErrorDialog();
+            }
+
+            // Option Corrections For Grade 12
+            if (grade == 12 && !(option4.equalsIgnoreCase("Business") || option4.equalsIgnoreCase("IT") || option4.equalsIgnoreCase("Physics") || option4.equalsIgnoreCase("Art") || option4.equalsIgnoreCase("Biology") || option4.equalsIgnoreCase("History") || option4.equalsIgnoreCase("Drama") || option4.equalsIgnoreCase("AP Maths") || option4.equalsIgnoreCase("Chemistry"))) {
+                showErrorDialog();
+            }
+            if (grade == 12 && !(option3.equalsIgnoreCase("Physics") || option3.equalsIgnoreCase("Accounting") || option3.equalsIgnoreCase("Biology") || option3.equalsIgnoreCase("CAT") || option3.equalsIgnoreCase("Geography") || option3.equalsIgnoreCase("Drama") || option3.equalsIgnoreCase("AP Maths") || option3.equalsIgnoreCase("Consumer"))) {
+                showErrorDialog();
+            }
+            if (grade == 12 && !(option2.equalsIgnoreCase("Physics") || option2.equalsIgnoreCase("Business") || option2.equalsIgnoreCase("IT") || option2.equalsIgnoreCase("Consumer") || option2.equalsIgnoreCase("History") || option2.equalsIgnoreCase("Art") || option2.equalsIgnoreCase("Geography") || option2.equalsIgnoreCase("Chemistry"))) {
+                showErrorDialog();
+            }
+
+            String timetablePath = "C:\\Users\\kaira\\Desktop\\ICT\\ICT_Program1 - SahetiTimeTable\\TimeTables\\" + grade + homeTeacher + ".png";
+
+            // Load timetable
+            String timetableData = loadTimetable(timetablePath);
+
+            // Display timetable
+            timetableFrame = new JFrame("Saheti Time Table");
+            timetableFrame.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\kaira\\Desktop\\ICT\\ICT_Program1 - SahetiTimeTable\\TimeTables\\SahetiIcon.png"));
+            timetableFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            timetableFrame.addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    minimizeToTray();
+                }
+            });
+            timetableFrame.setSize(800, 600);
+            JLabel timetableLabel = new JLabel(new ImageIcon(timetableData));
+            timetableLabel.setHorizontalAlignment(JLabel.CENTER);
+            timetableLabel.setVerticalAlignment(JLabel.CENTER);
+            JScrollPane scrollPane = new JScrollPane(timetableLabel);
+            timetableFrame.getContentPane().add(scrollPane);
+            timetableFrame.setVisible(true);
+
+            // Check for next subject
+            String nextSubject = getNextSubject(timetableData, currentHour, currentMinute);
+            if (nextSubject != null) {
+                JOptionPane.showMessageDialog(timetableFrame, "Your next subject is: " + nextSubject, "Next Subject", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+
+    private static void showErrorDialog() {
+        JOptionPane.showMessageDialog(null, "Invalid subject selection for the chosen grade!", "Error", JOptionPane.ERROR_MESSAGE);
+        System.exit(0);
+    }
+
+    private static String loadTimetable(String path) {
+        StringBuilder timetableData = new StringBuilder();
+        try {
+            java.io.File file = new java.io.File(path);
+            java.util.Scanner input = new java.util.Scanner(file);
+            while (input.hasNext()) {
+                timetableData.append(input.nextLine()).append("\n");
+            }
+            input.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return timetableData.toString();
+    }
+
+    private static String getNextSubject(String timetableData, int currentHour, int currentMinute) {
+        String[] lines = timetableData.split("\n");
+        for (String line : lines) {
+            String[] parts = line.split(",");
+            String time = parts[0].trim();
+            int hour = Integer.parseInt(time.split(":")[0]);
+            int minute = Integer.parseInt(time.split(":")[1]);
+            if (hour > currentHour || (hour == currentHour && minute >= currentMinute)) {
+                return parts[1].trim();
+            }
+        }
+        return null;
+    }
+
+    private static void minimizeToTray() {
+        if (!SystemTray.isSupported()) {
+            System.out.println("SystemTray is not supported");
+            return;
+        }
+        final SystemTray tray = SystemTray.getSystemTray();
+        ImageIcon imageIcon = new ImageIcon("C:\\Users\\kaira\\Desktop\\ICT\\ICT_Program1 - SahetiTimeTable\\TimeTables\\SahetiIcon.png");
+        trayIcon = new TrayIcon(imageIcon.getImage(), "Saheti Time Table");
+        trayIcon.setImageAutoSize(true);
+
+        trayIcon.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    tray.remove(trayIcon);
+                    timetableFrame.setVisible(true);
+                    timetableFrame.setExtendedState(JFrame.NORMAL);
+                }
+            }
+        });
+
+        try {
+            tray.add(trayIcon);
+            timetableFrame.setVisible(false);
+            JOptionPane.showMessageDialog(null, "The application has been minimized to the system tray.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

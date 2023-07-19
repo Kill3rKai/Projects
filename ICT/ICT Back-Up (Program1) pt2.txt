@@ -1,0 +1,248 @@
+package ict_program1.sahetitimetable;
+
+import javax.swing.JOptionPane;
+import javax.swing.*;
+import java.time.Year;
+import java.time.LocalTime;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
+
+public class ICT_Program1SahetiTimeTable {
+    private static TrayIcon trayIcon;
+
+    public static void main(String[] args) {
+        JOptionPane.showMessageDialog(null, "This Application will alert you of your next subject", "INFO", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "We will start by entering your subject data");
+
+        // GUI
+        JTextField O4 = new JTextField(10);
+        JTextField O3 = new JTextField(10);
+        JTextField O2 = new JTextField(10);
+        JTextField Grade = new JTextField(10);
+        JTextField HomeTeacher = new JTextField(10);
+        JTextField CurrentYear = new JTextField(10);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(new JLabel("Option 4: "));
+        panel.add(O4);
+        panel.add(new JLabel("Option 3: "));
+        panel.add(O3);
+        panel.add(new JLabel("Option 2: "));
+        panel.add(O2);
+        panel.add(new JLabel("Grade: "));
+        panel.add(Grade);
+        panel.add(new JLabel("Home Room Teacher: "));
+        panel.add(HomeTeacher);
+        panel.add(new JLabel("Current Year: "));
+        panel.add(CurrentYear);
+
+        // Data Received
+        int result = JOptionPane.showConfirmDialog(null, panel, "Enter Subject Data", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            String option4 = O4.getText();
+            String option3 = O3.getText();
+            String option2 = O2.getText();
+            int grade = Integer.parseInt(Grade.getText());
+            String homeTeacher = HomeTeacher.getText();
+            int currentYear = Integer.parseInt(CurrentYear.getText());
+            int currentYearNow = Year.now().getValue();
+            int currentHour = LocalTime.now().getHour();
+            int currentMinute = LocalTime.now().getMinute();
+
+            // Update Grade and Year Annually
+            if (currentYearNow > currentYear) {
+                currentYearNow++;
+                grade++;
+            }
+
+            // Option Corrections For Grade 10
+            if (grade == 10 && !(option4.equalsIgnoreCase("Business") || option4.equalsIgnoreCase("IT") || option4.equalsIgnoreCase("Physics") || option4.equalsIgnoreCase("Art") || option4.equalsIgnoreCase("Biology") || option4.equalsIgnoreCase("History") || option4.equalsIgnoreCase("Drama"))) {
+                showErrorDialog();
+            }
+            if (grade == 10 && !(option3.equalsIgnoreCase("Physics") || option3.equalsIgnoreCase("Accounting") || option3.equalsIgnoreCase("Biology") || option3.equalsIgnoreCase("CAT") || option3.equalsIgnoreCase("Geography"))) {
+                showErrorDialog();
+            }
+            if (grade == 10 && !(option2.equalsIgnoreCase("Physics") || option2.equalsIgnoreCase("Business") || option2.equalsIgnoreCase("IT") || option2.equalsIgnoreCase("Consumer") || option2.equalsIgnoreCase("History"))) {
+                showErrorDialog();
+            }
+
+            // Option Corrections For Grade 11
+            if (grade == 11 && !(option4.equalsIgnoreCase("Physics") || option4.equalsIgnoreCase("Art") || option4.equalsIgnoreCase("Business") || option4.equalsIgnoreCase("Biology") || option4.equalsIgnoreCase("IT") || option4.equalsIgnoreCase("History") || option4.equalsIgnoreCase("CAT") || option4.equalsIgnoreCase("Drama"))) {
+                showErrorDialog();
+            }
+            if (grade == 11 && !(option3.equalsIgnoreCase("Physics") || option3.equalsIgnoreCase("Accounting") || option3.equalsIgnoreCase("Biology") || option3.equalsIgnoreCase("CAT") || option3.equalsIgnoreCase("Geography"))) {
+                showErrorDialog();
+            }
+            if (grade == 11 && !(option2.equalsIgnoreCase("Physics") || option2.equalsIgnoreCase("Business") || option2.equalsIgnoreCase("IT") || option2.equalsIgnoreCase("Consumers") || option2.equalsIgnoreCase("History"))) {
+                showErrorDialog();
+            }
+
+            // Option Correction For Grade 12
+            if (grade == 12 && !(option4.equalsIgnoreCase("Physics") || option4.equalsIgnoreCase("Biology") || option4.equalsIgnoreCase("Consumers") || option4.equalsIgnoreCase("History") || option4.equalsIgnoreCase("IT"))) {
+                showErrorDialog();
+            }
+            if (grade == 12 && !(option3.equalsIgnoreCase("Physics") || option3.equalsIgnoreCase("Biology") || option3.equalsIgnoreCase("CAT") || option3.equalsIgnoreCase("Business") || option3.equalsIgnoreCase("Geography"))) {
+                showErrorDialog();
+            }
+            if (grade == 12 && !(option2.equalsIgnoreCase("Physics") || option2.equalsIgnoreCase("Accounting") || option2.equalsIgnoreCase("CAT") || option2.equalsIgnoreCase("Art") || option2.equalsIgnoreCase("History") || option2.equalsIgnoreCase("Drama"))) {
+                showErrorDialog();
+            }
+
+            // Output
+            if (homeTeacher.equalsIgnoreCase("MH") && grade == 10) {
+                Grade10MH();
+            }
+            if (homeTeacher.equalsIgnoreCase("GG") && grade == 10) {
+                Grade10GG();
+            }
+            if (homeTeacher.equalsIgnoreCase("ZS") && grade == 10) {
+                Grade10ZS();
+            }
+            if (homeTeacher.equalsIgnoreCase("MT") && grade == 10) {
+                Grade10MT();
+            }
+
+            // Set up system tray
+            BackRoundApplicationSettings();
+        }
+    }
+
+    public static void BackRoundApplicationSettings() {
+        if (SystemTray.isSupported()) {
+            SystemTray tray = SystemTray.getSystemTray();
+
+            ImageIcon icon = new ImageIcon("C:\\Users\\kaira\\Desktop\\ICT\\ICT_Program1 - SahetiTimeTable\\TimeTables\\SahetiIcon.png");
+            trayIcon = new TrayIcon(icon.getImage(), "Saheti TimeTable");
+
+            try {
+                tray.add(trayIcon);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            trayIcon.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (e.getClickCount() == 2) {
+                        restoreFromTray();
+                    }
+                }
+            });
+
+            minimizeToTray();
+        }
+    }
+    //System Tray Minimisation
+    private static void minimizeToTray() {
+        // Hide the main frame
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        frame.setSize(300, 200);
+
+        // Add a window listener to handle the windowClosing event
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                restoreFromTray();
+            }
+        });
+
+        JButton button = new JButton("Hide Window");
+        button.addActionListener(e -> {
+            restoreFromTray();
+        });
+        frame.add(button);
+
+        frame.setVisible(true);
+
+        // Minimize to system tray
+        SystemTray tray = SystemTray.getSystemTray();
+        TrayIcon trayIcon = new TrayIcon(new ImageIcon("C:\\path\\to\\tray_icon.png").getImage());
+        try {
+            tray.add(trayIcon);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        trayIcon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    restoreFromTray();
+                }
+            }
+        });
+    }
+    //System Tray Opening
+    private static void restoreFromTray() {
+        // Remove the system tray icon
+        SystemTray.getSystemTray().remove(trayIcon);
+
+        // Show the main frame
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300, 200);
+
+        // Add a window listener to handle the windowClosing event
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                minimizeToTray();
+            }
+        });
+
+        JButton button = new JButton("Hide Window");
+        button.addActionListener(e -> {
+            minimizeToTray();
+        });
+        frame.add(button);
+
+        frame.setVisible(true);
+    }
+    //Grades And Classes (10)
+    private static void Grade10MH() {
+        String ImagePath = "C:\\Users\\kaira\\Desktop\\ICT\\ICT_Program1 - SahetiTimeTable\\TimeTables\\10MH.png";
+        ImageIcon icon = new ImageIcon(ImagePath);
+        JLabel label = new JLabel(icon);
+
+        JOptionPane.showMessageDialog(null, label, "Grade 10 MH", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private static void Grade10GG() {
+        String ImagePath = "C:\\Users\\kaira\\Desktop\\ICT\\ICT_Program1 - SahetiTimeTable\\TimeTables\\10GG.png";
+        ImageIcon icon = new ImageIcon(ImagePath);
+        JLabel label = new JLabel(icon);
+
+        JOptionPane.showMessageDialog(null, label, "Grade 10 GG", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private static void Grade10ZS() {
+        String ImagePath = "C:\\Users\\kaira\\Desktop\\ICT\\ICT_Program1 - SahetiTimeTable\\TimeTables\\10ZS.png";
+        ImageIcon icon = new ImageIcon(ImagePath);
+        JLabel label = new JLabel(icon);
+
+        JOptionPane.showMessageDialog(null, label, "Grade 10 ZS", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private static void Grade10MT() {
+        String ImagePath = "C:\\Users\\kaira\\Desktop\\ICT\\ICT_Program1 - SahetiTimeTable\\TimeTables\\10MT.png";
+        ImageIcon icon = new ImageIcon(ImagePath);
+        JLabel label = new JLabel(icon);
+
+        JOptionPane.showMessageDialog(null, label, "Grade 10 ZS", JOptionPane.PLAIN_MESSAGE);
+    }
+    //Error Handler
+    private static void showErrorDialog() {
+        JOptionPane.showMessageDialog(null, "Error, Subjects Do Not Match Grade, Restarting Program", "ERROR", JOptionPane.ERROR_MESSAGE);
+        System.exit(0);
+    }
+}
